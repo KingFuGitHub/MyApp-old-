@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="red">
+        <item name="colorAccent">@color/red</item>
+    </style>
+
+<!--    <style name="roundcorner" parent="">-->
+<!--        <item name="cornerSize">10%</item>-->
+<!--        <item name="background">@drawable/blur_background</item>-->
+<!--        <item name="color">@drawable/blur_background</item>-->
+<!--        <item name="backgroundColor">@drawable/blur_background</item>-->
+<!--        <item name="backgroundOverlayColorAlpha">@drawable/blur_background</item>-->
+<!--    </style>-->
+<style name="navigationbar">
+    <item name="android:navigationBarColor">@color/black</item>
+</style>
+</resources>

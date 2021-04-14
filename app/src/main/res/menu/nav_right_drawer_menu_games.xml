@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/miSkillTwo"
+        android:title="Skill 2: Malevolent Shrine"
+        android:icon="@drawable/ic_fire" />
+
+    <item
+        android:title=""
+        />
+
+    <item
+        android:title=""
+        />
+
+    <item
+        android:title=""
+        />
+
+    <item
+        android:title=""
+        />
+
+    <item
+        android:title=""
+        />
+
+    <item
+        android:title=""
+        />
+
+    <item
+        android:title=""
+        />
+
+    <item
+        android:title=""
+        />
+
+    <item
+        android:title=""
+        />
+
+    <item
+        android:title=""
+        />
+
+    <item
+        android:title=""
+        />
+
+    <item
+        android:title=""
+        />
+
+    <item
+        android:title=""
+        />
+
+    <item
+        android:title=""
+        />
+
+    <item
+        android:title=""
+        />
+
+
+</menu>

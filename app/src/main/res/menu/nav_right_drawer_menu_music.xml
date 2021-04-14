@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/miCongratulation"
+        android:title="1. Congratulation"
+        android:icon="@drawable/ic_note"/>
+
+    <item
+        android:id="@+id/miInTheEnd"
+        android:title="2. In The End"
+        android:icon="@drawable/ic_note"/>
+
+    <item
+        android:id="@+id/miLoveMeLikeYouDo"
+        android:title="3. Love Me Like You Do"
+        android:icon="@drawable/ic_note"/>
+
+    <item
+        android:title=""
+        />
+
+    <item
+        android:title=""
+        />
+
+    <item
+        android:title=""
+        />
+
+    <item
+        android:title=""
+        />
+
+    <item
+        android:title=""
+        />
+
+    <item
+        android:title=""
+        />
+
+    <item
+        android:title=""
+        />
+
+    <item
+        android:title=""
+        />
+
+    <item
+        android:title=""
+        />
+
+    <item
+        android:title=""
+        />
+
+    <item
+        android:title=""
+        />
+
+    <item
+        android:title=""
+        />
+
+    <item
+        android:title=""
+        />
+
+
+</menu>
