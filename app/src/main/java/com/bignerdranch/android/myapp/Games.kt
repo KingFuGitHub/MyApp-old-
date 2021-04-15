@@ -125,7 +125,7 @@ class Games : AppCompatActivity() {
 
         }
 
-        navView.setNavigationItemSelectedListener {
+        navView.setNavigationItemSelectedListener { it ->
 
             val toast = Toast.makeText(this, "You're currently in Games", Toast.LENGTH_SHORT)
             toast.setGravity(Gravity.TOP, 0, 0)

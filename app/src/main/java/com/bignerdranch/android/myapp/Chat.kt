@@ -82,6 +82,11 @@ class Chat : AppCompatActivity() {
             true
         }
 
+        val chatListFragment = ChatListFragment()
+        supportFragmentManager.beginTransaction().apply {
+            replace(R.id.chatFragment, chatListFragment)
+            commit()
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
