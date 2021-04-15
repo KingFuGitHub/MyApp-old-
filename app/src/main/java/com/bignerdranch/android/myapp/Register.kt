@@ -29,6 +29,7 @@ class Register : AppCompatActivity() {
         btnGoToLogin.setOnClickListener {
             Intent(this@Register, Login::class.java).also {
                 startActivity(it)
+                finish()
             }
         }
     }
@@ -46,6 +47,7 @@ class Register : AppCompatActivity() {
                         toast.show()
                         Intent(this@Register, Login::class.java).also {
                             startActivity(it)
+                            finish()
                         }
                     }
                 } catch (e: Exception) {

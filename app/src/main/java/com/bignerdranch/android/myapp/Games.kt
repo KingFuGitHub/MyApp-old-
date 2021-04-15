@@ -184,7 +184,7 @@ class Games : AppCompatActivity() {
                         cvSkillTwoBorder.toggleVisibility()
                         cvSkillTwo.toggleVisibility()
                         ivSkillTwo.toggleVisibility()
-                        tvCoins.text = ""+(GOLD - 2000)
+                        tvCoins.text = ""+(GOLD - 2500)
                         YoYo.with(Techniques.Shake).playOn(tvCoins)
                         obtainSkillTwo = true
                     } else if(GOLD < 2500 && obtainSkillTwo == false){

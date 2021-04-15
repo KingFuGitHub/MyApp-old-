@@ -28,24 +28,23 @@
             android:id="@+id/seekBarMusic"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="75dp"
             android:max="1000"
             android:min="0"
-            app:layout_constraintBottom_toTopOf="@+id/cvMediaControl"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/cvHeathBar" />
+            app:layout_constraintTop_toBottomOf="@+id/cvPictureHolder" />
 
         <androidx.cardview.widget.CardView
             android:id="@+id/cvMediaControl"
             android:layout_width="300dp"
             android:layout_height="100dp"
-            android:layout_marginTop="60dp"
+            android:layout_marginTop="175dp"
             app:cardCornerRadius="50dp"
             app:cardElevation="50dp"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/cvHeathBar">
+            app:layout_constraintTop_toBottomOf="@+id/cvPictureHolder">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -146,44 +145,44 @@
             android:id="@+id/tvCongratulation"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="25dp"
             android:fontFamily="@font/titillium_web_bold"
             android:text="Congratulation by Post Malone"
             android:textColor="@color/black"
             android:textSize="18sp"
-            app:layout_constraintBottom_toTopOf="@+id/seekBarMusic"
+            android:visibility="visible"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/cvHeathBar"
-            android:visibility="visible"/>
+            app:layout_constraintTop_toBottomOf="@+id/cvPictureHolder" />
 
         <TextView
             android:id="@+id/tvInTheEnd"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="25dp"
             android:fontFamily="@font/titillium_web_bold"
             android:text="In The End by The Linkin Park"
             android:textColor="@color/black"
             android:textSize="18sp"
             android:visibility="gone"
-            app:layout_constraintBottom_toTopOf="@+id/seekBarMusic"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/cvHeathBar" />
+            app:layout_constraintTop_toBottomOf="@+id/cvPictureHolder" />
 
         <TextView
             android:id="@+id/tvLoveMeLikeYouDo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="25dp"
             android:fontFamily="@font/titillium_web_bold"
             android:text="Love Me Like You Do by Ellie Goulding"
             android:textColor="@color/black"
             android:textSize="18sp"
             android:visibility="gone"
-            app:layout_constraintBottom_toTopOf="@+id/seekBarMusic"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.378"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/cvHeathBar" />
-
+            app:layout_constraintTop_toBottomOf="@+id/cvPictureHolder" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
