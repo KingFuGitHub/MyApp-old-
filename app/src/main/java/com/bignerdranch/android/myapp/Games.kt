@@ -5,6 +5,7 @@ import android.content.Intent
 import android.graphics.BitmapFactory
 import android.media.MediaPlayer
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -13,6 +14,7 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.SeekBar
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import com.daimajia.androidanimations.library.Techniques
@@ -37,19 +39,21 @@ class Games : AppCompatActivity() {
     val imageRef = Firebase.storage.reference
     var slashAttack = 0
     var currentMonster = 0
-    var RANDOM: Int = 0
-    var GOLD: Int = 0
-    var obtainSkillTwo = false
-
+    var RANDOM = 0
+    var GOLD = 0
+    var obtainSkill2 = false
+    var obtainSkill3 = false
+    var GoldenTimeCheck = false
+    var counter = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.games)
 
-        val mediaPlayer = MediaPlayer.create(this, R.raw.demonslayer_op)
-        mediaPlayer.isLooping = true
-        mediaPlayer.start()
+        val backgroundMusic = MediaPlayer.create(this, R.raw.demonslayer_op)
+        backgroundMusic.isLooping = true
+        backgroundMusic.start()
 
         toggle = ActionBarDrawerToggle(this, drawerGames, R.string.open, R.string.close)
 
@@ -63,6 +67,19 @@ class Games : AppCompatActivity() {
         btnTapAttack.setOnClickListener {
             attack(slashAttack)
             slashAttack++
+            goldenTimeTap()
+        }
+
+        ivMusicOn.setOnClickListener {
+            backgroundMusic.start()
+            ivMusicOff.toggleVisibility()
+            ivMusicOn.toggleVisibility()
+        }
+
+        ivMusicOff.setOnClickListener {
+            backgroundMusic.pause()
+            ivMusicOn.toggleVisibility()
+            ivMusicOff.toggleVisibility()
         }
 
         seekBarHeathBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
@@ -79,53 +96,76 @@ class Games : AppCompatActivity() {
             }
         })
 
-
-        val uriZenitsu: Uri = Uri.parse("android.resource://$packageName/${R.raw.zenitsu}")
+        val uriZenitsu: Uri = Uri.parse("android.resource://$packageName/${R.raw.skill_1_zenitsu}")
         vvZenitsu.setVideoURI(uriZenitsu)
 
-        ivSkillOne.setOnClickListener {
-            cvSkillOne.toggleVisibility()
-            cvSkillOneBorder.toggleVisibility()
+        ivSkill_1.setOnClickListener {
+            cvSkill_1.toggleVisibility()
+            cvSkill_1_Border.toggleVisibility()
             vvZenitsu.toggleVisibility()
             vvZenitsu.start()
+            vvZenitsu.setZOrderOnTop(true)
             YoYo.with(Techniques.FadeOut).delay(11000).playOn(vvZenitsu)
             Handler(Looper.getMainLooper()).postDelayed({
-                for (ATTACK in slashAttack..slashAttack + 20) {
+                vvZenitsu.toggleVisibility()
+                for (ATTACK in slashAttack..slashAttack + 15) {
+                    goldenTimeTap()
                     skillOne(ATTACK)
                 }
-                cvSkillOne.toggleVisibility()
-                cvSkillOneBorder.toggleVisibility()
-                vvZenitsu.toggleVisibility()
-                YoYo.with(Techniques.FadeIn).playOn(cvSkillOneBorder)
-                YoYo.with(Techniques.FadeIn).playOn(cvSkillOne)
+                cvSkill_1.toggleVisibility()
+                cvSkill_1_Border.toggleVisibility()
+                YoYo.with(Techniques.FadeIn).playOn(cvSkill_1_Border)
+                YoYo.with(Techniques.FadeIn).playOn(cvSkill_1)
             }, 11500)
         }
 
-        val uriSukuna: Uri = Uri.parse("android.resource://$packageName/${R.raw.sukuna_domain_expansion_video}")
+        val uriSukuna: Uri = Uri.parse("android.resource://$packageName/${R.raw.skill_2_sukuna_domain_expansion_video}")
         vvSukuna.setVideoURI(uriSukuna)
 
-        ivSkillTwo.setOnClickListener {
-            ivSkillTwo.setOnClickListener {
-                cvSkillTwo.toggleVisibility()
-                cvSkillTwoBorder.toggleVisibility()
+        ivSkill_2.setOnClickListener {
+            cvSkill_2.toggleVisibility()
+            cvSkill_2_Border.toggleVisibility()
+            vvSukuna.toggleVisibility()
+            vvSukuna.start()
+            vvSukuna.setZOrderOnTop(true)
+            YoYo.with(Techniques.FadeOut).delay(11000).playOn(vvSukuna)
+            Handler(Looper.getMainLooper()).postDelayed({
                 vvSukuna.toggleVisibility()
-                vvSukuna.start()
-                YoYo.with(Techniques.FadeOut).delay(11200).playOn(vvSukuna)
-                Handler(Looper.getMainLooper()).postDelayed({
-                    for (ATTACK in slashAttack..slashAttack + 20) {
-                        skillOne(ATTACK)
-                    }
-                    cvSkillTwo.toggleVisibility()
-                    cvSkillTwoBorder.toggleVisibility()
-                    vvSukuna.toggleVisibility()
-                    YoYo.with(Techniques.FadeIn).playOn(cvSkillTwoBorder)
-                    YoYo.with(Techniques.FadeIn).playOn(cvSkillTwo)
-                }, 11300)
-            }
+                for (ATTACK in slashAttack..slashAttack + 15) {
+                    goldenTimeTap()
+                    skillOne(ATTACK)
+                }
+                cvSkill_2.toggleVisibility()
+                cvSkill_2_Border.toggleVisibility()
+                YoYo.with(Techniques.FadeIn).playOn(cvSkill_2_Border)
+                YoYo.with(Techniques.FadeIn).playOn(cvSkill_2)
+            }, 11000)
 
         }
 
-        navView.setNavigationItemSelectedListener {
+
+        val uriGoldenTime: Uri = Uri.parse("android.resource://$packageName/${R.raw.skill_3_golden_time}")
+        vvGoldenTime.setVideoURI(uriGoldenTime)
+
+        ivSkill_3.setOnClickListener {
+            cvSkill_3.toggleVisibility()
+            cvSkill_3_Border.toggleVisibility()
+            vvGoldenTime.toggleVisibility()
+            vvGoldenTime.start()
+            GoldenTimeCheck = true
+            YoYo.with(Techniques.FadeOut).delay(12000).playOn(vvGoldenTime)
+            Handler(Looper.getMainLooper()).postDelayed({
+                cvSkill_3.toggleVisibility()
+                cvSkill_3_Border.toggleVisibility()
+                vvGoldenTime.toggleVisibility()
+                YoYo.with(Techniques.FadeIn).playOn(cvSkill_3_Border)
+                YoYo.with(Techniques.FadeIn).playOn(cvSkill_3)
+                GoldenTimeCheck = false
+            }, 12100)
+        }
+
+
+        navView.setNavigationItemSelectedListener{
 
             val toast = Toast.makeText(this, "You're currently in Games", Toast.LENGTH_SHORT)
             toast.setGravity(Gravity.TOP, 0, 0)
@@ -134,19 +174,19 @@ class Games : AppCompatActivity() {
                 R.id.miHome -> Intent(this, Home::class.java).also {
                     startActivity(it)
                     finish()
-                    mediaPlayer.stop()
+                    backgroundMusic.stop()
                 }
 
                 R.id.miCapture -> Intent(this, Capture::class.java).also {
                     startActivity(it)
                     finish()
-                    mediaPlayer.stop()
+                    backgroundMusic.stop()
                 }
 
                 R.id.miChat -> Intent(this, Chat::class.java).also {
                     startActivity(it)
                     finish()
-                    mediaPlayer.stop()
+                    backgroundMusic.stop()
                 }
 
                 R.id.miGames -> toast.show()
@@ -154,42 +194,59 @@ class Games : AppCompatActivity() {
                 R.id.miMusic -> Intent(this, Music::class.java).also {
                     startActivity(it)
                     finish()
-                    mediaPlayer.stop()
+                    backgroundMusic.stop()
                 }
 
                 R.id.miSetting -> Intent(this, Settings::class.java).also {
                     startActivity(it)
                     finish()
-                    mediaPlayer.stop()
+                    backgroundMusic.stop()
                 }
 
                 R.id.miLogout -> Intent(this, Login::class.java).also {
                     startActivity(it)
                     finish()
-                    mediaPlayer.stop()
+                    backgroundMusic.stop()
                 }
             }
             true
         }
 
-        navViewGames.setNavigationItemSelectedListener {
-            val toast1 = Toast.makeText(this, "Skill 2 is already acquired", Toast.LENGTH_SHORT)
+        navViewGames.setNavigationItemSelectedListener{
+            val toast1 = Toast.makeText(this, "Skill is owned", Toast.LENGTH_SHORT)
             toast1.setGravity(Gravity.TOP, 0, 0)
-            val toast2 = Toast.makeText(this, "Not enough gold", Toast.LENGTH_SHORT)
-            toast2.setGravity(Gravity.TOP, 0, 0)
+            val insufficientGold = Toast.makeText(this, "Not enough gold", Toast.LENGTH_SHORT)
+            insufficientGold.setGravity(Gravity.TOP, 0, 0)
+            val toast3 = Toast.makeText(this, "New skill obtained", Toast.LENGTH_SHORT)
+            toast3.setGravity(Gravity.TOP, 0, 0)
+            val toast4 = Toast.makeText(this, "You clicked skill 3", Toast.LENGTH_SHORT)
+            toast4.setGravity(Gravity.TOP, 0, 0)
 
             when (it.itemId) {
-                R.id.miSkillTwo -> {
-                    if (GOLD >= 2500 && obtainSkillTwo == false) {
-                        cvSkillTwoBorder.toggleVisibility()
-                        cvSkillTwo.toggleVisibility()
-                        ivSkillTwo.toggleVisibility()
-                        tvCoins.text = ""+(GOLD - 2000)
+                R.id.miSkill2 -> {
+                    if (GOLD >= 2500 && obtainSkill2 == false) {
+                        cvSkill_2_Border.toggleVisibility()
+                        tvCoins.text = "" + (GOLD - 2500)
                         YoYo.with(Techniques.Shake).playOn(tvCoins)
-                        obtainSkillTwo = true
-                    } else if(GOLD < 2500 && obtainSkillTwo == false){
-                        toast2.show()
-                    }else{
+                        obtainSkill2 = true
+                        toast3.show()
+                    } else if (GOLD < 2500 && obtainSkill2 == false) {
+                        insufficientGold.show()
+                    } else {
+                        toast1.show()
+                    }
+                }
+
+                R.id.miSkill3 -> {
+                    if (GOLD >= 2500 && obtainSkill3 == false) {
+                        cvSkill_3_Border.toggleVisibility()
+                        tvCoins.text = "" + (GOLD - 2500)
+                        YoYo.with(Techniques.Shake).playOn(tvCoins)
+                        obtainSkill3 = true
+                        toast3.show()
+                    } else if (GOLD < 2500 && obtainSkill2 == false) {
+                        insufficientGold.show()
+                    } else {
                         toast1.show()
                     }
                 }
@@ -538,6 +595,41 @@ class Games : AppCompatActivity() {
             GOLD = GOLD + tempGOLD
             tvCoins.text = "" + (GOLD)
             YoYo.with(Techniques.Landing).delay(50).playOn(ivCoins)
+        }
+    }
+
+    private fun goldenTimeTap(){
+        if(GoldenTimeCheck == true) {
+            GOLD = GOLD + 100
+            tvCoins.text = "" + (GOLD)
+            YoYo.with(Techniques.Shake).playOn(tvCoins)
+            tvGoldenTimeCoin.text = "+" + (100)
+            if (counter % 6 == 0) {
+                YoYo.with(Techniques.TakingOff).duration(1000).playOn(tvGoldenTimeCoin)
+                YoYo.with(Techniques.Wobble).delay(200).duration(200).playOn(tvGoldenTimeCoin)
+                YoYo.with(Techniques.SlideOutUp).delay(250).duration(100).playOn(tvGoldenTimeCoin)
+            } else if (counter % 6 == 1) {
+                YoYo.with(Techniques.Landing).duration(100).playOn(tvGoldenTimeCoin)
+                YoYo.with(Techniques.Swing).delay(200).duration(200).playOn(tvGoldenTimeCoin)
+                YoYo.with(Techniques.SlideOutUp).delay(250).duration(100).playOn(tvGoldenTimeCoin)
+            } else if (counter % 6 == 2) {
+                YoYo.with(Techniques.Tada).duration(1000).playOn(tvGoldenTimeCoin)
+                YoYo.with(Techniques.Wave).delay(200).duration(200).playOn(tvGoldenTimeCoin)
+                YoYo.with(Techniques.SlideOutUp).delay(250).duration(100).playOn(tvGoldenTimeCoin)
+            } else if (counter % 6 == 3) {
+                YoYo.with(Techniques.Shake).duration(1000).playOn(tvGoldenTimeCoin)
+                YoYo.with(Techniques.ZoomOutUp).delay(200).duration(200).playOn(tvGoldenTimeCoin)
+                YoYo.with(Techniques.SlideOutUp).delay(250).duration(100).playOn(tvGoldenTimeCoin)
+            } else if (counter % 6 == 4) {
+                YoYo.with(Techniques.Tada).duration(1000).playOn(tvGoldenTimeCoin)
+                YoYo.with(Techniques.Wave).delay(200).duration(2000).playOn(tvGoldenTimeCoin)
+                YoYo.with(Techniques.SlideOutUp).delay(250).duration(1000).playOn(tvGoldenTimeCoin)
+            } else if (counter % 6 == 5) {
+                YoYo.with(Techniques.Shake).duration(1000).playOn(tvGoldenTimeCoin)
+                YoYo.with(Techniques.ZoomOutUp).delay(200).duration(200).playOn(tvGoldenTimeCoin)
+                YoYo.with(Techniques.SlideOutUp).delay(250).duration(100).playOn(tvGoldenTimeCoin)
+            }
+            counter++
         }
     }
 }

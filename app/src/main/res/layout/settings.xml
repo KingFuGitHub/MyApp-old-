@@ -1,37 +1,50 @@
-<androidx.drawerlayout.widget.DrawerLayout
+<androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/drawerSettings"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Settings">
+    android:background="@color/black">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="16dp">
+        app:cardCornerRadius="20dp">
 
-        <TextView
-            android:id="@+id/etStageNumber"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/titillium_web_bold"
-            android:text="Welcome to settings"
-            android:textSize="24dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+        <androidx.drawerlayout.widget.DrawerLayout
+            xmlns:tools="http://schemas.android.com/tools"
+            android:id="@+id/drawerSettings"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:context=".Settings">
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="16dp">
 
-    <com.google.android.material.navigation.NavigationView
-        android:id="@+id/navView"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_gravity="start"
-        android:fitsSystemWindows="true"
-        android:foregroundGravity="left"
-        app:headerLayout="@layout/nav_left_header"
-        app:menu="@menu/nav_left_drawer_menu"/>
+                <TextView
+                    android:id="@+id/etStageNumber"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/titillium_web_bold"
+                    android:text="Welcome to settings"
+                    android:textSize="24dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-</androidx.drawerlayout.widget.DrawerLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <com.google.android.material.navigation.NavigationView
+                android:id="@+id/navView"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="start"
+                android:fitsSystemWindows="true"
+                android:foregroundGravity="left"
+                app:headerLayout="@layout/nav_left_header"
+                app:menu="@menu/nav_left_drawer_menu"/>
+
+        </androidx.drawerlayout.widget.DrawerLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+</androidx.constraintlayout.widget.ConstraintLayout>

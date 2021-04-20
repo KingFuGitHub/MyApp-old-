@@ -1,6 +1,7 @@
 package com.bignerdranch.android.myapp
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.graphics.BitmapFactory
 import android.media.MediaPlayer
@@ -11,8 +12,8 @@ import android.os.Looper
 import android.view.Gravity
 import android.view.MenuItem
 import android.view.View
-import android.widget.SeekBar
-import android.widget.Toast
+import android.view.inputmethod.InputMethodManager
+import android.widget.*
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import com.daimajia.androidanimations.library.Techniques
@@ -39,8 +40,16 @@ class Music : AppCompatActivity() {
 
     private var mp: MediaPlayer? = null
 
-    private var currentSong =
-        listOf(R.raw.congratulations, R.raw.in_the_end, R.raw.love_me_like_you_do)
+    private var currentSong = arrayListOf(
+        R.raw.congratulations,
+        R.raw.in_the_end,
+        R.raw.love_me_like_you_do
+    )
+    private var picture = arrayListOf<View>()
+    private var title = arrayListOf<View>()
+    private lateinit var currentPicture: View
+    private lateinit var currentTitle: View
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -49,6 +58,43 @@ class Music : AppCompatActivity() {
 
         window.decorView.toggleVisibility()
 
+        picture.add(0, ivCongratulation)
+        picture.add(1, ivInTheEnd)
+        picture.add(2, ivLoveMeLikeYouDo)
+        currentPicture = picture[0]
+
+        title.add(0, tvCongratulation)
+        title.add(1, tvInTheEnd)
+        title.add(2, tvLoveMeLikeYouDo)
+        currentTitle = title[0]
+
+
+        val actvSearchSong = findViewById<AutoCompleteTextView>(R.id.actvSearchSong)
+        val song_Name = resources.getStringArray(R.array.song_name)
+        val adapter = ArrayAdapter(this, R.layout.auto_complete_search_music, R.id.tvCustom, song_Name)
+        actvSearchSong.setAdapter(adapter)
+
+        actvSearchSong.setOnItemClickListener { _, _, position, _ ->
+            if (!actvSearchSong.isCursorVisible) {
+            }
+            val value = adapter.getItem(position) ?: ""
+            if (value == "Congratulation") {
+                selectSong(0)
+            } else if (value == "In The End") {
+                selectSong(1)
+            } else if (value == "Love Me Like You Do") {
+                selectSong(2)
+            }
+            actvSearchSong.setText("")
+            actvSearchSong.clearListSelection()
+            val imm: InputMethodManager =
+                getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.hideSoftInputFromWindow(actvSearchSong.windowToken, 0) // to hide soft keyboard
+            actvSearchSong.isCursorVisible = false
+        }
+
+
+
         ivPlay.setOnClickListener {
             YoYo.with(Techniques.Landing).duration(1000).playOn(ivPlay)
             if (mp == null) {
@@ -56,53 +102,55 @@ class Music : AppCompatActivity() {
                 initialiseSeekBar()
             }
             mp?.start()
-            ivPlay.toggleVisibility()
-            ivPause.toggleVisibility()
-        }
+            togglePlayAndPauseButton()
 
+        }
 
         ivPause.setOnClickListener {
             YoYo.with(Techniques.Landing).duration(1000).playOn(ivPause)
             if (mp != null) {
                 mp?.pause()
             }
-            ivPlay.toggleVisibility()
-            ivPause.toggleVisibility()
+            togglePlayAndPauseButton()
         }
 
-        mp?.setOnCompletionListener(){
-               Toast.makeText(this, "song finished", Toast.LENGTH_LONG).show()
+        mp?.setOnCompletionListener() {
+            Toast.makeText(this, "song finished", Toast.LENGTH_LONG).show()
         }
 
         ivPrevious.setOnClickListener {
             YoYo.with(Techniques.Landing).playOn(ivPrevious)
+
+            currentPicture.toggleVisibility()
+            currentTitle.toggleVisibility()
+
             if (mp == null) {
-               Toast.makeText(this@Music, "You can't go backward if you never go forward.", Toast.LENGTH_LONG).show()
+                togglePlayAndPauseButton()
+                mp = MediaPlayer.create(this, currentSong[currentSong.size - 1])
+                initialiseSeekBar()
+                mp?.start()
+
+                togglePictureAndTitle(2)
+
+                currentSongIndex = currentSong.size - 1
             } else if (mp != null) {
-                currentSongIndex++
                 if (mp?.isPlaying == false) {
-                    ivPlay.toggleVisibility()
-                    ivPause.toggleVisibility()
+                    togglePlayAndPauseButton()
                 }
-                if (currentSongIndex % 3 == 1) {
-                    currentSongIndex++
-                    ivCongratulation.toggleVisibility()
-                    ivLoveMeLikeYouDo.toggleVisibility()
-                    tvCongratulation.toggleVisibility()
-                    tvLoveMeLikeYouDo.toggleVisibility()
+                if (currentSongIndex % 3 == 0) {
+
+                    togglePictureAndTitle(2)
+
+                } else if (currentSongIndex % 3 == 1) {
+
+                    togglePictureAndTitle(0)
+
                 } else if (currentSongIndex % 3 == 2) {
-                    currentSongIndex++
-                    ivInTheEnd.toggleVisibility()
-                    ivCongratulation.toggleVisibility()
-                    tvInTheEnd.toggleVisibility()
-                    tvCongratulation.toggleVisibility()
-                } else if (currentSongIndex % 3 == 0) {
-                    currentSongIndex++
-                    ivInTheEnd.toggleVisibility()
-                    ivLoveMeLikeYouDo.toggleVisibility()
-                    tvInTheEnd.toggleVisibility()
-                    tvLoveMeLikeYouDo.toggleVisibility()
+
+                    togglePictureAndTitle(1)
+
                 }
+                currentSongIndex = currentSongIndex + (currentSong.size - 1)
                 mp?.stop()
                 mp?.reset()
                 mp?.release()
@@ -112,49 +160,47 @@ class Music : AppCompatActivity() {
             }
         }
 
-
         ivSkip.setOnClickListener {
             YoYo.with(Techniques.Landing).playOn(ivSkip)
+
+            currentPicture.toggleVisibility()
+            currentTitle.toggleVisibility()
+
             if (mp == null) {
-                ivPlay.toggleVisibility()
-                ivPause.toggleVisibility()
+                currentSongIndex++
+                togglePlayAndPauseButton()
                 mp = MediaPlayer.create(this, currentSong[1])
                 initialiseSeekBar()
                 mp?.start()
-                ivCongratulation.toggleVisibility()
-                ivInTheEnd.toggleVisibility()
-                tvCongratulation.toggleVisibility()
-                tvInTheEnd.toggleVisibility()
-                currentSongIndex++
+
+                togglePictureAndTitle(1)
+
             } else if (mp != null) {
-                currentSongIndex++
+
                 if (mp?.isPlaying == false) {
-                    ivPlay.toggleVisibility()
-                    ivPause.toggleVisibility()
+                    togglePlayAndPauseButton()
                 }
+                if (currentSongIndex % 3 == 0) {
+
+                    togglePictureAndTitle(1)
+
+                } else if (currentSongIndex % 3 == 1) {
+
+                    togglePictureAndTitle(2)
+
+                } else if (currentSongIndex % 3 == 2) {
+
+                    togglePictureAndTitle(0)
+                }
+                currentSongIndex++
                 mp?.stop()
                 mp?.reset()
                 mp?.release()
                 mp = MediaPlayer.create(this, currentSong[currentSongIndex % 3])
                 initialiseSeekBar()
                 mp?.start()
-                if (currentSongIndex % 3 == 1) {
-                    ivCongratulation.toggleVisibility()
-                    ivInTheEnd.toggleVisibility()
-                    tvCongratulation.toggleVisibility()
-                    tvInTheEnd.toggleVisibility()
-                } else if (currentSongIndex % 3 == 2) {
-                    ivInTheEnd.toggleVisibility()
-                    ivLoveMeLikeYouDo.toggleVisibility()
-                    tvInTheEnd.toggleVisibility()
-                    tvLoveMeLikeYouDo.toggleVisibility()
-                } else if (currentSongIndex % 3 == 0) {
-                    ivLoveMeLikeYouDo.toggleVisibility()
-                    ivCongratulation.toggleVisibility()
-                    tvLoveMeLikeYouDo.toggleVisibility()
-                    tvCongratulation.toggleVisibility()
-                }
             }
+
         }
 
         seekBarMusic.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
@@ -171,6 +217,7 @@ class Music : AppCompatActivity() {
             override fun onStopTrackingTouch(seekBar: SeekBar?) {
 
             }
+
         })
 
         toggle = ActionBarDrawerToggle(this, drawerMusic, R.string.open, R.string.close)
@@ -180,7 +227,6 @@ class Music : AppCompatActivity() {
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         downloadImage("profilePicture")
-
 
         navView.setNavigationItemSelectedListener {
 
@@ -231,20 +277,33 @@ class Music : AppCompatActivity() {
 
 
         navViewMusic.setNavigationItemSelectedListener {
-            val toast = Toast.makeText(this, "You clicked on a song", Toast.LENGTH_SHORT)
-            toast.setGravity(Gravity.TOP, 0, 0)
+            val toast1 = Toast.makeText(this, "You clicked on a song", Toast.LENGTH_SHORT)
+            toast1.setGravity(Gravity.TOP, 0, 0)
+
+            val toast2 = Toast.makeText(this, "Song is currently selected", Toast.LENGTH_SHORT)
+            toast2.setGravity(Gravity.TOP, 0, 0)
 
             when (it.itemId) {
-                R.id.miCongratulation -> toast.show()
+                R.id.miCongratulation -> selectSong(0)
 
-                R.id.miInTheEnd -> toast.show()
 
-                R.id.miLoveMeLikeYouDo -> toast.show()
+                R.id.miInTheEnd -> selectSong(1)
+
+
+                R.id.miLoveMeLikeYouDo -> selectSong(2)
+
             }
             true
         }
 
     }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        mp?.stop()
+        mp?.release()
+    }
+
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (toggle.onOptionsItemSelected(item)) {
@@ -328,9 +387,120 @@ class Music : AppCompatActivity() {
         }
     }
 
+    private fun togglePlayAndPauseButton() {
+        ivPlay.toggleVisibility()
+        ivPause.toggleVisibility()
+    }
 
+    private fun selectSong(num: Int) {
+        val toast2 = Toast.makeText(this, "Song is currently selected", Toast.LENGTH_SHORT)
+        toast2.setGravity(Gravity.TOP, 0, 0)
 
+        if (num == 0) {
+            if (currentSongIndex % 3 == 0 && mp != null) {
+                toast2.show()
+            } else if (mp == null) {
+                if (mp?.isPlaying == true) {
+                    togglePlayAndPauseButton()
+                }
+                currentSongIndex = 0
+                mp = MediaPlayer.create(this, currentSong[currentSongIndex])
+                initialiseSeekBar()
+                mp?.start()
+            } else {
+                if (mp?.isPlaying == false) {
+                    togglePlayAndPauseButton()
+                }
+                currentPicture.toggleVisibility()
+                currentTitle.toggleVisibility()
+                currentSongIndex = 0
+                mp?.stop()
+                mp?.reset()
+                mp?.release()
+                mp = MediaPlayer.create(this, currentSong[currentSongIndex])
+                initialiseSeekBar()
+                mp?.start()
+
+                togglePictureAndTitle(0)
+            }
+        } else if (num == 1) {
+            if (currentSongIndex % 3 == 1 && mp != null) {
+                toast2.show()
+            } else if (mp == null) {
+                if (mp?.isPlaying == false) {
+                    togglePlayAndPauseButton()
+                }
+                currentPicture.toggleVisibility()
+                currentTitle.toggleVisibility()
+                currentSongIndex = 1
+                mp = MediaPlayer.create(this, currentSong[currentSongIndex])
+                initialiseSeekBar()
+                mp?.start()
+
+                togglePictureAndTitle(1)
+
+            } else {
+                if (mp?.isPlaying == false) {
+                    togglePlayAndPauseButton()
+                }
+                currentPicture.toggleVisibility()
+                currentTitle.toggleVisibility()
+                currentSongIndex = 1
+                mp?.stop()
+                mp?.reset()
+                mp?.release()
+                mp = MediaPlayer.create(this, currentSong[currentSongIndex])
+                initialiseSeekBar()
+                mp?.start()
+
+                togglePictureAndTitle(1)
+
+            }
+        } else if (num == 2) {
+            if (currentSongIndex % 3 == 2 && mp != null) {
+                toast2.show()
+            } else if (mp == null) {
+                if (mp?.isPlaying == false) {
+                    togglePlayAndPauseButton()
+                }
+                currentPicture.toggleVisibility()
+                currentTitle.toggleVisibility()
+                currentSongIndex = 2
+                mp = MediaPlayer.create(this, currentSong[currentSongIndex])
+                initialiseSeekBar()
+                mp?.start()
+
+                togglePictureAndTitle(2)
+
+            } else {
+                if (mp?.isPlaying == false) {
+                    togglePlayAndPauseButton()
+                }
+                currentPicture.toggleVisibility()
+                currentTitle.toggleVisibility()
+                currentSongIndex = 2
+                mp?.stop()
+                mp?.reset()
+                mp?.release()
+                mp = MediaPlayer.create(this, currentSong[currentSongIndex])
+                initialiseSeekBar()
+                mp?.start()
+
+                togglePictureAndTitle(2)
+
+            }
+        }
+    }
+
+    private fun togglePictureAndTitle(num: Int){
+        picture[num].toggleVisibility()
+        title[num].toggleVisibility()
+        currentPicture = picture[num]
+        currentTitle = title[num]
+    }
 }
+
+
 
 
 
