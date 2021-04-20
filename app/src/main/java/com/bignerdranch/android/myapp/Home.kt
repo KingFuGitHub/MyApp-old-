@@ -77,6 +77,7 @@ open class Home : AppCompatActivity() {
                 R.id.miLogout -> Intent(this@Home, Login::class.java).also {
                     startActivity(it)
                     finish()
+                    overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right)
                 }
             }
             true

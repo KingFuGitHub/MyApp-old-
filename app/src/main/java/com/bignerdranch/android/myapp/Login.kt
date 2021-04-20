@@ -30,6 +30,7 @@ class Login : AppCompatActivity() {
             Intent(this, Register::class.java).also {
                 startActivity(it)
                 finish()
+                overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right)
             }
         }
 
@@ -58,6 +59,7 @@ class Login : AppCompatActivity() {
                         Intent(this@Login, Home::class.java).also {
                             startActivity(it)
                             finish()
+                            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
                         }
                     }
                 } catch (e: Exception) {

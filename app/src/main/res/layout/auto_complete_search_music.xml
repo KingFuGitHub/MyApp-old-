@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/tvCustom"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        android:padding="5dp"
+        android:cursorVisible = "true"
+        android:textAlignment="center"
+        android:textColor="@color/black"
+        android:fontFamily="@font/titillium_web_semibold"
+        android:background="@color/white"/>
+
+</LinearLayout>
