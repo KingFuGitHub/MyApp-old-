@@ -17,7 +17,21 @@
         android:icon="@drawable/ic_note"/>
 
     <item
-        android:title=""
+        android:id="@+id/miDontTurnBack"
+        android:title="4. Don't Turn Back"
+        android:icon="@drawable/ic_note"
+        />
+
+    <item
+        android:id="@+id/miYoungAndBeautiful"
+        android:title="5. Young and Beautiful"
+        android:icon="@drawable/ic_note"
+        />
+
+    <item
+        android:id="@+id/miMyHeartWillGoOn"
+        android:title="6. My Heart Will Go On"
+        android:icon="@drawable/ic_note"
         />
 
     <item
@@ -57,15 +71,9 @@
         />
 
     <item
-        android:title=""
-        />
-
-    <item
-        android:title=""
-        />
-
-    <item
-        android:title=""
+        android:id="@+id/miAddSong"
+        android:title="Add Song"
+        android:icon="@drawable/ic_add"
         />
 
 

@@ -12,9 +12,14 @@
         android:textSize="16sp"
         android:padding="5dp"
         android:cursorVisible = "true"
-        android:textAlignment="center"
         android:textColor="@color/black"
+        android:textAlignment="center"
         android:fontFamily="@font/titillium_web_semibold"
         android:background="@color/white"/>
+
+<!--    <View-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="2dp"-->
+<!--        android:background="@color/white"/>-->
 
 </LinearLayout>

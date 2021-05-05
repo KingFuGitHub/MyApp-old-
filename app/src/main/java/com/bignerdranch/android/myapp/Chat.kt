@@ -73,18 +73,13 @@ class Chat : AppCompatActivity() {
             true
         }
 
-        navView.setNavigationItemSelectedListener {
+        navViewLeftChat.setNavigationItemSelectedListener {
 
             val toast = Toast.makeText(this, "You're currently in Chat", Toast.LENGTH_SHORT)
             toast.setGravity(Gravity.TOP, 0, 0)
 
             when (it.itemId) {
                 R.id.miHome -> Intent(this, Home::class.java).also {
-                    startActivity(it)
-                    finish()
-                }
-
-                R.id.miCapture -> Intent(this, Capture::class.java).also {
                     startActivity(it)
                     finish()
                 }
@@ -96,11 +91,6 @@ class Chat : AppCompatActivity() {
                     finish()
                 }
                 R.id.miMusic -> Intent(this, Music::class.java).also {
-                    startActivity(it)
-                    finish()
-                }
-
-                R.id.miSetting -> Intent(this, Settings::class.java).also {
                     startActivity(it)
                     finish()
                 }
@@ -207,7 +197,7 @@ class Chat : AppCompatActivity() {
 
             data?.data?.let {
                 curFile = it
-                ivImage.setImageURI(it)
+                ivProfilePicture.setImageURI(it)
                 uploadImageToStorage("profilePicture") // to upload profile picture to Firebase Cloud Storage
             }
         }
@@ -235,7 +225,7 @@ class Chat : AppCompatActivity() {
             val bytes = imageRef.child("images/$filename").getBytes(maxDownloadSize).await()
             val bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
             withContext(Dispatchers.Main) {
-                ivImage.setImageBitmap(bmp)
+                ivProfilePicture.setImageBitmap(bmp)
             }
         } catch (e: Exception) {
             withContext(Dispatchers.Main) {

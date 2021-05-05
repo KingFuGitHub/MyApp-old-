@@ -2,6 +2,14 @@
     <string name="app_name">MyApp</string>
     <string name="open">open</string>
     <string name="close">close</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="web_client_id">139452607857-7114tjkej82l43g7gifbspid2u8qir4r.apps.googleusercontent.com</string>
+
+    <string-array name="song_name">
+        <item>Congratulations</item>
+        <item>In The End</item>
+        <item>Love Me Like You Do</item>
+        <item>Dont Turn Back</item>
+        <item>Young and Beautiful</item>
+        <item>My Heart Will Go On</item>
+    </string-array>
 </resources>

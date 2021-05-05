@@ -7,7 +7,6 @@ import android.util.Log
 import android.view.Gravity
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.google.firebase.auth.ActionCodeEmailInfo
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import kotlinx.android.parcel.Parcelize
@@ -34,6 +33,8 @@ class Register : AppCompatActivity() {
         btnGoToLogin.setOnClickListener {
             Intent(this@Register, Login::class.java).also {
                 startActivity(it)
+                finish()
+                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
             }
         }
     }
@@ -45,13 +46,14 @@ class Register : AppCompatActivity() {
             CoroutineScope(Dispatchers.IO).launch {
                 try {
                     auth.createUserWithEmailAndPassword(email, password).await()
-                    saveUserToFirebaseDatabase()
                     withContext(Dispatchers.Main) {
                         val toast = Toast.makeText(this@Register, "Registered Successfully!", Toast.LENGTH_LONG)
                         toast.setGravity(Gravity.CENTER, 0, 0)
                         toast.show()
                         Intent(this@Register, Login::class.java).also {
                             startActivity(it)
+                            finish()
+                            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
                         }
                     }
                 } catch (e: Exception) {
@@ -77,7 +79,9 @@ class Register : AppCompatActivity() {
     }
 
     @Parcelize
-    class User(val uid: String, val email_info: String):Parcelable{
+    class User(val uid: String, val email_info: String): Parcelable {
         constructor() : this("","")
     }
+
+
 }
