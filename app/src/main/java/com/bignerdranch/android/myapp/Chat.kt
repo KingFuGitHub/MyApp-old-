@@ -6,12 +6,17 @@ import android.content.Intent
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.Gravity
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
+import com.bignerdranch.android.myapp.chat.ChatAdapter
+import com.bignerdranch.android.myapp.chat.Conversation
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.*
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 import kotlinx.android.synthetic.main.chat.*
@@ -23,16 +28,22 @@ import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 import java.lang.Exception
 
+var TAG = "Printing..."
+
 class Chat : AppCompatActivity() {
     lateinit var toggle: ActionBarDrawerToggle
     var curFile: Uri? = null
-    val imageRef = Firebase.storage.reference
+    private val imageRef = Firebase.storage.reference
+    private lateinit var auth: FirebaseAuth
+    private lateinit var conversationDatabaseReference : FirebaseDatabase
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.chat)
 
+        auth = FirebaseAuth.getInstance()
+        conversationDatabaseReference = FirebaseDatabase.getInstance()
         toggle = ActionBarDrawerToggle(this, drawerChat, R.string.open, R.string.close)
 
         drawerChat.addDrawerListener(toggle)
@@ -82,6 +93,7 @@ class Chat : AppCompatActivity() {
             true
         }
 
+        loadingChat()
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -139,5 +151,33 @@ class Chat : AppCompatActivity() {
                 Toast.makeText(this@Chat, e.message, Toast.LENGTH_LONG).show()
             }
         }
+    }
+
+    private fun loadingChat() {
+        val currentUID : String= auth.currentUser.uid
+        Log.d(TAG, "Current User ID: $currentUID")
+        var chatList : ArrayList<Conversation> = ArrayList()
+
+        conversationDatabaseReference
+            .getReference(currentUID)
+            .child("conversations")
+            .addListenerForSingleValueEvent(object : ValueEventListener{
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                dataSnapshot.children.forEach { it ->
+                    var key = it.key.toString()
+                    val value = it.value as ArrayList<String>
+                    value.removeAt(0)
+                    Log.d(TAG, "Value is: $key + $value")
+                    chatList.add(Conversation(key, value))
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                // Failed to read value
+                Log.w(TAG, "Failed to read value.", error.toException())
+            }
+        })
+
+        listChat.adapter = ChatAdapter(this@Chat, chatList)
     }
 }

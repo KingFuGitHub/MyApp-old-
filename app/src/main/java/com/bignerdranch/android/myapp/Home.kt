@@ -11,6 +11,7 @@ import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 import kotlinx.android.synthetic.main.home.*
@@ -35,6 +36,13 @@ open class Home : AppCompatActivity() {
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.home)
+
+        if (FirebaseAuth.getInstance().currentUser == null)
+            Intent(this@Home, Login::class.java).also {
+                startActivity(it)
+                finish()
+                overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right)
+            }
 
         toggle = ActionBarDrawerToggle(this, drawerHome, R.string.open, R.string.close)
 
