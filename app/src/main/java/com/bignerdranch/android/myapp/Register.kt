@@ -2,10 +2,15 @@ package com.bignerdranch.android.myapp
 
 import android.content.Intent
 import android.os.Bundle
+import android.os.Parcelable
+import android.util.Log
 import android.view.Gravity
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.google.firebase.auth.ActionCodeEmailInfo
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.FirebaseDatabase
+import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.login.*
 import kotlinx.android.synthetic.main.register.*
 import kotlinx.coroutines.*
@@ -40,6 +45,7 @@ class Register : AppCompatActivity() {
             CoroutineScope(Dispatchers.IO).launch {
                 try {
                     auth.createUserWithEmailAndPassword(email, password).await()
+                    saveUserToFirebaseDatabase()
                     withContext(Dispatchers.Main) {
                         val toast = Toast.makeText(this@Register, "Registered Successfully!", Toast.LENGTH_LONG)
                         toast.setGravity(Gravity.CENTER, 0, 0)
@@ -57,5 +63,21 @@ class Register : AppCompatActivity() {
         }
     }
 
+    private fun saveUserToFirebaseDatabase() {
+        val uid = FirebaseAuth.getInstance().uid ?: ""
+        val ref = FirebaseDatabase.getInstance().getReference("/users/$uid")
+        val user = User(uid, etEmailRegister.text.toString())
+        ref.setValue(user)
+            .addOnSuccessListener {
+                Log.d("RegisterActivity", "Finally we saved the user to Firebase Database")
+            }
+            .addOnFailureListener {
+                Log.d("Failed", "Failed to set value to database: ${it.message}")
+            }
+    }
 
+    @Parcelize
+    class User(val uid: String, val email_info: String):Parcelable{
+        constructor() : this("","")
+    }
 }
