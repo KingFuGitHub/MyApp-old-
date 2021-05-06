@@ -77,7 +77,7 @@ class Profile : AppCompatActivity() {
                     finish()
                 }
 
-                R.id.miGames -> Intent(this, Games::class.java).also {
+                R.id.miGames -> Intent(this, Game::class.java).also {
                     startActivity(it)
                     finish()
                 }

@@ -252,7 +252,7 @@ class Music : AppCompatActivity() {
                     runnable?.let { it -> handler.removeCallbacks(it) }
                 }
 
-                R.id.miGames -> Intent(this, Games::class.java).also {
+                R.id.miGames -> Intent(this, Game::class.java).also {
                     startActivity(it)
                     finish()
                     mp?.stop()

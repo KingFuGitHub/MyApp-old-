@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <item android:title="Tap Attack">
         <menu>
             <item
                 android:id="@+id/miTapAttack"
                 android:icon="@drawable/ic_fire"
-                android:title="Tap Attack lv 2" />
+                android:title="Tap Attack lv 1"/>
         </menu>
     </item>
 
@@ -15,7 +17,7 @@
             <item
                 android:id="@+id/miSkill_2"
                 android:icon="@drawable/ic_fire"
-                android:title="Skill 2: Malevolent Shrine" />
+                android:title="Skill 2: Malevolent Shrine"/>
 
             <item
                 android:id="@+id/miSkill_3"

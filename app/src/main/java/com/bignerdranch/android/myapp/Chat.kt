@@ -1,7 +1,6 @@
 package com.bignerdranch.android.myapp
 
 
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import android.graphics.BitmapFactory
@@ -12,7 +11,6 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
-import android.widget.Toolbar
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -86,7 +84,7 @@ class Chat : AppCompatActivity() {
 
                 R.id.miChat -> toast.show()
 
-                R.id.miGames -> Intent(this, Games::class.java).also {
+                R.id.miGames -> Intent(this, Game::class.java).also {
                     startActivity(it)
                     finish()
                 }

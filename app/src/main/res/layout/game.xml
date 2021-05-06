@@ -15,7 +15,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@drawable/gamebackground"
-            tools:context=".Games">
+            tools:context=".Game">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -38,7 +38,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="25dp"
                     android:fontFamily="@font/titillium_web_bold"
-                    android:text="Hand Demon Lv99"
+                    android:text="Hand Demon lv 1"
                     android:textColor="#832DFF"
                     android:textSize="26sp"
                     android:visibility="visible"
@@ -54,7 +54,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="25dp"
                     android:fontFamily="@font/titillium_web_bold"
-                    android:text="Rhino Lv99"
+                    android:text="Rhino lv 1"
                     android:textColor="#FF9800"
                     android:textSize="26sp"
                     android:visibility="gone"
@@ -70,7 +70,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="25dp"
                     android:fontFamily="@font/titillium_web_bold"
-                    android:text="Deep Sea King Lv99"
+                    android:text="Deep Sea King lv 1"
                     android:textColor="#6586FF"
                     android:textSize="26sp"
                     android:visibility="gone"
@@ -795,10 +795,13 @@
                 android:fitsSystemWindows="true"
                 android:foregroundGravity="right"
                 app:headerLayout="@layout/nav_right_header_games"
-                app:menu="@menu/nav_right_drawer_menu_games"
-                android:elevation="20dp"/>
+                app:menu="@menu/nav_right_drawer_menu_game"
+                app:itemMaxLines="200"
+                android:elevation="20dp" />
 
         </androidx.drawerlayout.widget.DrawerLayout>
 
     </com.google.android.material.card.MaterialCardView>
 </androidx.constraintlayout.widget.ConstraintLayout>
+
+

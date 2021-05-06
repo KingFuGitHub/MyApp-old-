@@ -26,11 +26,12 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".Chat" />
         </activity>
+        <activity android:name=".Profile"/>
         <activity
             android:name=".Music"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".Games"
+            android:name=".Game"
             android:screenOrientation="portrait" />
         <activity android:name=".Chat" />
         <activity android:name=".Register"

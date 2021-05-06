@@ -58,7 +58,7 @@ open class Home : AppCompatActivity() {
                     startActivity(it)
                     finish()
                 }
-                R.id.miGames -> Intent(this@Home, Games::class.java).also {
+                R.id.miGames -> Intent(this@Home, Game::class.java).also {
                     startActivity(it)
                     finish()
                 }

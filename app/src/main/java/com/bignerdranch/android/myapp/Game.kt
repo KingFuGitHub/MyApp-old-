@@ -7,14 +7,17 @@ import android.graphics.BitmapFactory
 import android.graphics.Typeface
 import android.media.MediaPlayer
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.view.Gravity
+import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.SeekBar
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -33,7 +36,7 @@ import kotlinx.coroutines.tasks.await
 import java.util.*
 
 
-class Games : AppCompatActivity() {
+class Game : AppCompatActivity() {
 
     lateinit var toggle: ActionBarDrawerToggle
     private var curFile: Uri? = null
@@ -59,7 +62,10 @@ class Games : AppCompatActivity() {
     private var skill_Damage = 1
     private var bonusGold = 0
     private lateinit var backgroundMusic: MediaPlayer
+    private var tapAttackLevel = 1
+    private var monsterLevel = 1
 
+    @RequiresApi(Build.VERSION_CODES.M)
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
@@ -85,11 +91,11 @@ class Games : AppCompatActivity() {
             slashAttack++
             goldenTimeTap()
 
-            if(currentEnergy < totalEnergy && slashAttack % 2 == 0){
+            if (currentEnergy < totalEnergy && slashAttack % 2 == 0) {
                 currentEnergy = currentEnergy + energyRegen
                 tvCurrentEnergy.text = "$currentEnergy"
                 pbEnergyBar.incrementProgressBy(energyRegen)
-                if(currentEnergy > totalEnergy){
+                if (currentEnergy > totalEnergy) {
                     currentEnergy = totalEnergy
                     tvCurrentEnergy.text = "$currentEnergy"
                     pbEnergyBar.progress = currentEnergy
@@ -352,6 +358,7 @@ class Games : AppCompatActivity() {
             true
         }
 
+
         navViewRightGames.setNavigationItemSelectedListener {
             val toast1 = Toast.makeText(this, "Skill is owned", Toast.LENGTH_SHORT)
             toast1.setGravity(Gravity.TOP, 0, 0)
@@ -411,13 +418,17 @@ class Games : AppCompatActivity() {
                         tvCoins.text = "${GOLD - 2500}"
                         GOLD = GOLD - 2500
                         tapDamage = tapDamage + (tapDamage * 2 - tapDamage / 2)
+                        val menu: Menu = navViewRightGames.menu
+                        val tap = menu.findItem(R.id.miTapAttack)
+                        tapAttackLevel++
+                        tap.title = "Tap Attack lv ${tapAttackLevel}"
                         YoYo.with(Techniques.Shake).playOn(tvCoins)
                     } else {
                         insufficientGold.show()
                     }
                 }
 
-                R.id.miTapEnergyRegen ->{
+                R.id.miTapEnergyRegen -> {
                     if (GOLD >= 2500) {
                         tvCoins.text = "${GOLD - 2500}"
                         GOLD = GOLD - 2500
@@ -444,7 +455,7 @@ class Games : AppCompatActivity() {
                     }
                 }
 
-                R.id.miCritChance ->{
+                R.id.miCritChance -> {
                     if (GOLD >= 2500) {
                         tvCoins.text = "${GOLD - 2500}"
                         GOLD = GOLD - 2500
@@ -455,7 +466,7 @@ class Games : AppCompatActivity() {
                     }
                 }
 
-                R.id.miCritDamage ->{
+                R.id.miCritDamage -> {
                     if (GOLD >= 2500) {
                         tvCoins.text = "${GOLD - 2500}"
                         GOLD = GOLD - 2500
@@ -466,11 +477,11 @@ class Games : AppCompatActivity() {
                     }
                 }
 
-                R.id.miSkillDamage ->{
+                R.id.miSkillDamage -> {
                     if (GOLD >= 2500) {
                         tvCoins.text = "${GOLD - 2500}"
                         GOLD = GOLD - 2500
-                        skill_Damage = skill_Damage*2
+                        skill_Damage = skill_Damage * 2
                         YoYo.with(Techniques.Shake).playOn(tvCoins)
                     } else {
                         insufficientGold.show()
@@ -536,13 +547,13 @@ class Games : AppCompatActivity() {
             curFile?.let {
                 imageRef.child("images/$filename").putFile(it).await()
                 withContext(Dispatchers.Main) {
-                    Toast.makeText(this@Games, "Successfully uploaded image", Toast.LENGTH_LONG)
+                    Toast.makeText(this@Game, "Successfully uploaded image", Toast.LENGTH_LONG)
                         .show()
                 }
             }
         } catch (e: Exception) {
             withContext(Dispatchers.Main) {
-                Toast.makeText(this@Games, e.message, Toast.LENGTH_LONG).show()
+                Toast.makeText(this@Game, e.message, Toast.LENGTH_LONG).show()
             }
         }
     }
@@ -557,7 +568,7 @@ class Games : AppCompatActivity() {
             }
         } catch (e: Exception) {
             withContext(Dispatchers.Main) {
-                Toast.makeText(this@Games, e.message, Toast.LENGTH_LONG).show()
+                Toast.makeText(this@Game, e.message, Toast.LENGTH_LONG).show()
             }
         }
 
@@ -584,7 +595,7 @@ class Games : AppCompatActivity() {
                 if (tapDamage <= armor) {
                     tvDamageText.text = "0"
                     pbhealthBar.incrementProgressBy(0)
-                }else{
+                } else {
                     tvDamageText.text = "${tapDamage - armor}"
                     pbhealthBar.incrementProgressBy(-tapDamage + armor)
                 }
@@ -594,10 +605,10 @@ class Games : AppCompatActivity() {
                 tvDamageText.setTextColor(ContextCompat.getColor(this, R.color.orange))
                 //tvDamageText.text = "${tapDamage * Crit_Damage - armor} crit"
                 //pbhealthBar.incrementProgressBy(-tapDamage * Crit_Damage + armor)
-                if (tapDamage*Crit_Damage <= armor) {
+                if (tapDamage * Crit_Damage <= armor) {
                     tvDamageText.text = "0 crit"
                     pbhealthBar.incrementProgressBy(0)
-                }else{
+                } else {
                     tvDamageText.text = "${tapDamage * Crit_Damage - armor} crit"
                     pbhealthBar.incrementProgressBy(-tapDamage * Crit_Damage + armor)
                 }
@@ -639,7 +650,7 @@ class Games : AppCompatActivity() {
                 if (tapDamage < armor) {
                     tvDamageText.text = "0"
                     pbhealthBar.incrementProgressBy(0)
-                }else{
+                } else {
                     tvDamageText.text = "${tapDamage - armor}"
                     pbhealthBar.incrementProgressBy(-tapDamage + armor)
                 }
@@ -649,10 +660,10 @@ class Games : AppCompatActivity() {
                 tvDamageText.setTextColor(ContextCompat.getColor(this, R.color.orange))
                 //tvDamageText.text = "${tapDamage * Crit_Damage - armor} crit"
                 //pbhealthBar.incrementProgressBy(-tapDamage * Crit_Damage + armor)
-                if (tapDamage*Crit_Damage <= armor) {
+                if (tapDamage * Crit_Damage <= armor) {
                     tvDamageText.text = "0 crit"
                     pbhealthBar.incrementProgressBy(0)
-                }else {
+                } else {
                     tvDamageText.text = "${tapDamage * Crit_Damage - armor} crit"
                     pbhealthBar.incrementProgressBy(-tapDamage * Crit_Damage + armor)
                 }
@@ -694,7 +705,7 @@ class Games : AppCompatActivity() {
                 if (tapDamage <= armor) {
                     tvDamageText.text = "0"
                     pbhealthBar.incrementProgressBy(0)
-                }else{
+                } else {
                     tvDamageText.text = "${tapDamage - armor}"
                     pbhealthBar.incrementProgressBy(-tapDamage + armor)
                 }
@@ -704,10 +715,10 @@ class Games : AppCompatActivity() {
                 tvDamageText.setTextColor(ContextCompat.getColor(this, R.color.orange))
                 //tvDamageText.text = "${tapDamage * Crit_Damage - armor} crit"
                 //pbhealthBar.incrementProgressBy(-tapDamage * Crit_Damage + armor)
-                if (tapDamage*Crit_Damage <= armor) {
+                if (tapDamage * Crit_Damage <= armor) {
                     tvDamageText.text = "0 crit"
                     pbhealthBar.incrementProgressBy(0)
-                }else{
+                } else {
                     tvDamageText.text = "${tapDamage * Crit_Damage - armor} crit"
                     pbhealthBar.incrementProgressBy(-tapDamage * Crit_Damage + armor)
                 }
@@ -749,7 +760,7 @@ class Games : AppCompatActivity() {
                 if (tapDamage <= armor) {
                     tvDamageText.text = "0"
                     pbhealthBar.incrementProgressBy(0)
-                }else {
+                } else {
                     tvDamageText.text = "${tapDamage - armor}"
                     pbhealthBar.incrementProgressBy(-tapDamage + armor)
                 }
@@ -759,10 +770,10 @@ class Games : AppCompatActivity() {
                 tvDamageText.setTextColor(ContextCompat.getColor(this, R.color.orange))
                 //tvDamageText.text = "${tapDamage * Crit_Damage - armor} crit"
                 //pbhealthBar.incrementProgressBy(-tapDamage * Crit_Damage + armor)
-                if (tapDamage*Crit_Damage <= armor) {
+                if (tapDamage * Crit_Damage <= armor) {
                     tvDamageText.text = "0 crit"
                     pbhealthBar.incrementProgressBy(0)
-                }else {
+                } else {
                     tvDamageText.text = "${tapDamage * Crit_Damage - armor} crit"
                     pbhealthBar.incrementProgressBy(-tapDamage * Crit_Damage + armor)
                 }
@@ -804,7 +815,7 @@ class Games : AppCompatActivity() {
                 if (tapDamage <= armor) {
                     tvDamageText.text = "0"
                     pbhealthBar.incrementProgressBy(0)
-                }else {
+                } else {
                     tvDamageText.text = "${tapDamage - armor}"
                     pbhealthBar.incrementProgressBy(-tapDamage + armor)
                 }
@@ -814,10 +825,10 @@ class Games : AppCompatActivity() {
                 tvDamageText.setTextColor(ContextCompat.getColor(this, R.color.orange))
                 //tvDamageText.text = "${tapDamage * Crit_Damage - armor} crit"
                 //pbhealthBar.incrementProgressBy(-tapDamage * Crit_Damage + armor)
-                if (tapDamage*Crit_Damage <= armor) {
+                if (tapDamage * Crit_Damage <= armor) {
                     tvDamageText.text = "0 crit"
                     pbhealthBar.incrementProgressBy(0)
-                }else {
+                } else {
                     tvDamageText.text = "${tapDamage * Crit_Damage - armor} crit"
                     pbhealthBar.incrementProgressBy(-tapDamage * Crit_Damage + armor)
                 }
@@ -859,7 +870,7 @@ class Games : AppCompatActivity() {
                 if (tapDamage <= armor) {
                     tvDamageText.text = "0"
                     pbhealthBar.incrementProgressBy(0)
-                }else {
+                } else {
                     tvDamageText.text = "${tapDamage - armor}"
                     pbhealthBar.incrementProgressBy(-tapDamage + armor)
                 }
@@ -869,10 +880,10 @@ class Games : AppCompatActivity() {
                 tvDamageText.setTextColor(ContextCompat.getColor(this, R.color.orange))
                 //tvDamageText.text = "${tapDamage * Crit_Damage - armor} crit"
                 //pbhealthBar.incrementProgressBy(-tapDamage * Crit_Damage + armor)
-                if (tapDamage*Crit_Damage <= armor) {
+                if (tapDamage * Crit_Damage <= armor) {
                     tvDamageText.text = "0 crit"
                     pbhealthBar.incrementProgressBy(0)
-                }else {
+                } else {
                     tvDamageText.text = "${tapDamage * Crit_Damage - armor} crit"
                     pbhealthBar.incrementProgressBy(-tapDamage * Crit_Damage + armor)
                 }
@@ -933,10 +944,10 @@ class Games : AppCompatActivity() {
                 tvDamageText.setTextColor(ContextCompat.getColor(this, R.color.red))
                 //tvDamageText.text = "${tapDamage * skill_Damage - armor}"
                 //pbhealthBar.incrementProgressBy(-tapDamage * skill_Damage + armor)
-                if (tapDamage*skill_Damage <= armor) {
+                if (tapDamage * skill_Damage <= armor) {
                     tvDamageText.text = "0"
                     pbhealthBar.incrementProgressBy(0)
-                }else{
+                } else {
                     tvDamageText.text = "${tapDamage * skill_Damage - armor}"
                     pbhealthBar.incrementProgressBy(-tapDamage * skill_Damage + armor)
                 }
@@ -946,10 +957,10 @@ class Games : AppCompatActivity() {
                 tvDamageText.setTextColor(ContextCompat.getColor(this, R.color.orange))
                 //tvDamageText.text = "${tapDamage * Crit_Damage * skill_Damage - armor} crit"
                 //pbhealthBar.incrementProgressBy(-tapDamage * Crit_Damage * skill_Damage + armor)
-                if (tapDamage*Crit_Damage*skill_Damage <= armor) {
+                if (tapDamage * Crit_Damage * skill_Damage <= armor) {
                     tvDamageText.text = "0 crit"
                     pbhealthBar.incrementProgressBy(0)
-                }else{
+                } else {
                     tvDamageText.text = "${tapDamage * Crit_Damage * skill_Damage - armor} crit"
                     pbhealthBar.incrementProgressBy(-tapDamage * Crit_Damage * skill_Damage + armor)
                 }
@@ -988,10 +999,10 @@ class Games : AppCompatActivity() {
                 tvDamageText.setTextColor(ContextCompat.getColor(this, R.color.red))
                 //tvDamageText.text = "${tapDamage * skill_Damage - armor}"
                 //pbhealthBar.incrementProgressBy(-tapDamage * skill_Damage + armor)
-                if (tapDamage*skill_Damage <= armor) {
+                if (tapDamage * skill_Damage <= armor) {
                     tvDamageText.text = "0"
                     pbhealthBar.incrementProgressBy(0)
-                }else{
+                } else {
                     tvDamageText.text = "${tapDamage * skill_Damage - armor}"
                     pbhealthBar.incrementProgressBy(-tapDamage * skill_Damage + armor)
                 }
@@ -1001,10 +1012,10 @@ class Games : AppCompatActivity() {
                 tvDamageText.setTextColor(ContextCompat.getColor(this, R.color.orange))
                 //tvDamageText.text = "${tapDamage * Crit_Damage * skill_Damage - armor} crit"
                 //pbhealthBar.incrementProgressBy(-tapDamage * Crit_Damage * skill_Damage + armor)
-                if (tapDamage*Crit_Damage*skill_Damage <= armor) {
+                if (tapDamage * Crit_Damage * skill_Damage <= armor) {
                     tvDamageText.text = "0 crit"
                     pbhealthBar.incrementProgressBy(0)
-                }else{
+                } else {
                     tvDamageText.text = "${tapDamage * Crit_Damage * skill_Damage - armor} crit"
                     pbhealthBar.incrementProgressBy(-tapDamage * Crit_Damage * skill_Damage + armor)
                 }
@@ -1043,10 +1054,10 @@ class Games : AppCompatActivity() {
                 tvDamageText.setTextColor(ContextCompat.getColor(this, R.color.red))
                 //tvDamageText.text = "${tapDamage * skill_Damage - armor}"
                 //pbhealthBar.incrementProgressBy(-tapDamage * skill_Damage + armor)
-                if (tapDamage*skill_Damage <= armor) {
+                if (tapDamage * skill_Damage <= armor) {
                     tvDamageText.text = "0"
                     pbhealthBar.incrementProgressBy(0)
-                }else{
+                } else {
                     tvDamageText.text = "${tapDamage * skill_Damage - armor}"
                     pbhealthBar.incrementProgressBy(-tapDamage * skill_Damage + armor)
                 }
@@ -1056,10 +1067,10 @@ class Games : AppCompatActivity() {
                 tvDamageText.setTextColor(ContextCompat.getColor(this, R.color.orange))
                 //tvDamageText.text = "${tapDamage * Crit_Damage * skill_Damage - armor} crit"
                 //pbhealthBar.incrementProgressBy(-tapDamage * Crit_Damage * skill_Damage + armor)
-                if (tapDamage*Crit_Damage*skill_Damage <= armor) {
+                if (tapDamage * Crit_Damage * skill_Damage <= armor) {
                     tvDamageText.text = "0 crit"
                     pbhealthBar.incrementProgressBy(0)
-                }else{
+                } else {
                     tvDamageText.text = "${tapDamage * Crit_Damage * skill_Damage - armor} crit"
                     pbhealthBar.incrementProgressBy(-tapDamage * Crit_Damage * skill_Damage + armor)
                 }
@@ -1098,10 +1109,10 @@ class Games : AppCompatActivity() {
                 tvDamageText.setTextColor(ContextCompat.getColor(this, R.color.red))
                 //vDamageText.text = "${tapDamage * skill_Damage - armor}"
                 //pbhealthBar.incrementProgressBy(-tapDamage * skill_Damage + armor)
-                if (tapDamage*skill_Damage <= armor) {
+                if (tapDamage * skill_Damage <= armor) {
                     tvDamageText.text = "0"
                     pbhealthBar.incrementProgressBy(0)
-                }else{
+                } else {
                     tvDamageText.text = "${tapDamage * skill_Damage - armor}"
                     pbhealthBar.incrementProgressBy(-tapDamage * skill_Damage + armor)
                 }
@@ -1111,10 +1122,10 @@ class Games : AppCompatActivity() {
                 tvDamageText.setTextColor(ContextCompat.getColor(this, R.color.orange))
                 //tvDamageText.text = "${tapDamage * Crit_Damage * skill_Damage - armor} crit"
                 //pbhealthBar.incrementProgressBy(-tapDamage * Crit_Damage * skill_Damage + armor)
-                if (tapDamage*Crit_Damage*skill_Damage <= armor) {
+                if (tapDamage * Crit_Damage * skill_Damage <= armor) {
                     tvDamageText.text = "0 crit"
                     pbhealthBar.incrementProgressBy(0)
-                }else{
+                } else {
                     tvDamageText.text = "${tapDamage * Crit_Damage * skill_Damage - armor} crit"
                     pbhealthBar.incrementProgressBy(-tapDamage * Crit_Damage * skill_Damage + armor)
                 }
@@ -1152,11 +1163,11 @@ class Games : AppCompatActivity() {
                 tvDamageText.textSize = 30f
                 tvDamageText.setTextColor(ContextCompat.getColor(this, R.color.red))
                 //tvDamageText.text = "${tapDamage * skill_Damage - armor}"
-               // pbhealthBar.incrementProgressBy(-tapDamage * skill_Damage + armor)
-                if (tapDamage*skill_Damage <= armor) {
+                // pbhealthBar.incrementProgressBy(-tapDamage * skill_Damage + armor)
+                if (tapDamage * skill_Damage <= armor) {
                     tvDamageText.text = "0"
                     pbhealthBar.incrementProgressBy(0)
-                }else{
+                } else {
                     tvDamageText.text = "${tapDamage * skill_Damage - armor}"
                     pbhealthBar.incrementProgressBy(-tapDamage * skill_Damage + armor)
                 }
@@ -1166,10 +1177,10 @@ class Games : AppCompatActivity() {
                 tvDamageText.setTextColor(ContextCompat.getColor(this, R.color.orange))
                 //tvDamageText.text = "${tapDamage * Crit_Damage * skill_Damage - armor} crit"
                 //pbhealthBar.incrementProgressBy(-tapDamage * Crit_Damage * skill_Damage + armor)
-                if (tapDamage*Crit_Damage*skill_Damage <= armor) {
+                if (tapDamage * Crit_Damage * skill_Damage <= armor) {
                     tvDamageText.text = "0 crit"
                     pbhealthBar.incrementProgressBy(0)
-                }else{
+                } else {
                     tvDamageText.text = "${tapDamage * Crit_Damage * skill_Damage - armor} crit"
                     pbhealthBar.incrementProgressBy(-tapDamage * Crit_Damage * skill_Damage + armor)
                 }
@@ -1208,10 +1219,10 @@ class Games : AppCompatActivity() {
                 tvDamageText.setTextColor(ContextCompat.getColor(this, R.color.red))
                 //tvDamageText.text = "${tapDamage * skill_Damage - armor}"
                 //pbhealthBar.incrementProgressBy(-tapDamage * skill_Damage + armor)
-                if (tapDamage*skill_Damage <= armor) {
+                if (tapDamage * skill_Damage <= armor) {
                     tvDamageText.text = "0"
                     pbhealthBar.incrementProgressBy(0)
-                }else{
+                } else {
                     tvDamageText.text = "${tapDamage * skill_Damage - armor}"
                     pbhealthBar.incrementProgressBy(-tapDamage * skill_Damage + armor)
                 }
@@ -1221,10 +1232,10 @@ class Games : AppCompatActivity() {
                 tvDamageText.setTextColor(ContextCompat.getColor(this, R.color.orange))
                 //tvDamageText.text = "${tapDamage * Crit_Damage * skill_Damage - armor} crit"
                 //pbhealthBar.incrementProgressBy(-tapDamage * Crit_Damage * skill_Damage + armor)
-                if (tapDamage*Crit_Damage*skill_Damage <= armor) {
+                if (tapDamage * Crit_Damage * skill_Damage <= armor) {
                     tvDamageText.text = "0 crit"
                     pbhealthBar.incrementProgressBy(0)
-                }else{
+                } else {
                     tvDamageText.text = "${tapDamage * Crit_Damage * skill_Damage - armor} crit"
                     pbhealthBar.incrementProgressBy(-tapDamage * Crit_Damage * skill_Damage + armor)
                 }
@@ -1282,6 +1293,11 @@ class Games : AppCompatActivity() {
                 armor = armor + randomArmor
                 tvArmor.text = "$armor"
             }
+
+            monsterLevel++
+            tvHandDemon.text = "Hand Demon Lv ${monsterLevel}"
+            tvRhino.text = "Rhino Lv ${monsterLevel}"
+            tvDeepSeaKing.text = "DeepSeaKing Lv ${monsterLevel}"
 
             currentStage++
 
