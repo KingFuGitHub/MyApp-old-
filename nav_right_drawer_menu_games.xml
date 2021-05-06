@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:title="Tap upgrades">
+        <menu>
+            <item
+                android:id="@+id/miTapAttack"
+                android:icon="@drawable/ic_fire"
+                android:title="2500g/+1 Tap Damage Level " />
+
+            <item
+                android:id="@+id/miTapEnergyRegen"
+                android:icon="@drawable/ic_fire"
+                android:title="2000g/Tap Energy Regen + 1"/>
+
+            <item
+                android:id="@+id/miTotalEnergy"
+                android:icon="@drawable/ic_fire"
+                android:title="3000g/Energy Capacity + 20"/>
+
+            <item
+                android:id="@+id/miCritChance"
+                android:icon="@drawable/ic_fire"
+                android:title="3000g/Crit Chance + 5%"/>
+
+            <item
+                android:id="@+id/miCritDamage"
+                android:icon="@drawable/ic_fire"
+                android:title="2750g/Crit Damage + 5%"/>
+
+            <item
+                android:id="@+id/miSkillDamage"
+                android:icon="@drawable/ic_fire"
+                android:title="3500g/Skill Damage x2"/>
+
+            <item
+                android:id="@+id/miBonusGold"
+                android:icon="@drawable/ic_fire"
+                android:title="5000g/+1000 gold per kill"/>
+        </menu>
+    </item>
+
+    <item android:title="Skills">
+        <menu>
+
+            <item
+                android:id="@+id/miSkill_2"
+                android:icon="@drawable/ic_fire"
+                android:title="2500g/Skill 2: Malevolent Shrine" />
+
+            <item
+                android:id="@+id/miSkill_3"
+                android:icon="@drawable/ic_fire"
+                android:title="3500g/Skill 3: Golden Time" />
+
+            <item
+                android:id="@+id/miSkill_4"
+                android:icon="@drawable/ic_fire"
+                android:title="4500g/Skill 3: Piercing Nail" />
+        </menu>
+    </item>
+
+    <item android:title="" />
+
+    <item android:title="" />
+
+    <item android:title="" />
+
+    <item android:title="" />
+
+    <item android:title="" />
+
+    <item android:title="" />
+
+    <item android:title="" />
+
+    <item android:title="" />
+
+    <item android:title="" />
+
+    <item android:title="" />
+
+    <item android:title="" />
+
+    <item
+        android:id="@+id/miIncreaseArmor"
+        android:title="Increase armor"
+        android:icon="@drawable/ic_fire"/>
+
+    <item
+        android:id="@+id/miGreedisGood"
+        android:icon="@drawable/ic_fire"
+        android:title="Greed is good" />
+</menu>
