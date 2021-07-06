@@ -36,8 +36,10 @@
                     android:id="@+id/tvHandDemon"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="25dp"
+                    android:layout_marginBottom="5dp"
                     android:fontFamily="@font/titillium_web_bold"
+                    android:shadowColor="#832DFF"
+                    android:shadowRadius="20"
                     android:text="Hand Demon lv 1"
                     android:textColor="#832DFF"
                     android:textSize="26sp"
@@ -45,15 +47,16 @@
                     app:layout_constraintBottom_toTopOf="@+id/cvHeathBar"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.502"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/etStageNumber" />
+                    app:layout_constraintStart_toStartOf="parent" />
 
                 <TextView
                     android:id="@+id/tvRhino"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="25dp"
+                    android:layout_marginBottom="5dp"
                     android:fontFamily="@font/titillium_web_bold"
+                    android:shadowColor="#FF9800"
+                    android:shadowRadius="20"
                     android:text="Rhino lv 1"
                     android:textColor="#FF9800"
                     android:textSize="26sp"
@@ -61,23 +64,23 @@
                     app:layout_constraintBottom_toTopOf="@+id/cvHeathBar"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.502"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/etStageNumber" />
+                    app:layout_constraintStart_toStartOf="parent" />
 
                 <TextView
                     android:id="@+id/tvDeepSeaKing"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="25dp"
+                    android:layout_marginBottom="5dp"
                     android:fontFamily="@font/titillium_web_bold"
+                    android:shadowColor="#6586FF"
+                    android:shadowRadius="20"
                     android:text="Deep Sea King lv 1"
                     android:textColor="#6586FF"
                     android:textSize="26sp"
                     android:visibility="gone"
                     app:layout_constraintBottom_toTopOf="@+id/cvHeathBar"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/etStageNumber" />
+                    app:layout_constraintStart_toStartOf="parent" />
 
                 <TextView
                     android:id="@+id/tvStageNumber"

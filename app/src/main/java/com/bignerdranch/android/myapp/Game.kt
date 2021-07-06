@@ -210,6 +210,7 @@ class Game : AppCompatActivity() {
                     YoYo.with(Techniques.FadeIn).playOn(cvSkill_1)
                 }, 11000)
             }
+        }
 
             val uriSukuna: Uri =
                 Uri.parse("android.resource://$packageName/${R.raw.skill_2_sukuna_domain_expansion_video}")
@@ -246,7 +247,7 @@ class Game : AppCompatActivity() {
 
                 }
             }
-        }
+
 
 
         val uriGoldenTime: Uri =
@@ -254,7 +255,7 @@ class Game : AppCompatActivity() {
         vvGoldenTime.setVideoURI(uriGoldenTime)
 
         ivSkill_3.setOnClickListener {
-            if (currentEnergy < 20) {
+            if (currentEnergy < 25) {
                 Toast.makeText(this, "Not enough energy", Toast.LENGTH_SHORT).show()
             } else {
                 vvGoldenTime.start()

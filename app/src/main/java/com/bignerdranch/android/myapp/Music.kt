@@ -281,11 +281,6 @@ class Music : AppCompatActivity() {
 
 
         navViewMusic.setNavigationItemSelectedListener {
-            val toast1 = Toast.makeText(this, "You clicked on a song", Toast.LENGTH_SHORT)
-            toast1.setGravity(Gravity.TOP, 0, 0)
-
-            val toast2 = Toast.makeText(this, "Song is currently selected", Toast.LENGTH_SHORT)
-            toast2.setGravity(Gravity.TOP, 0, 0)
 
             when (it.itemId) {
                 R.id.miCongratulation -> selectSong(0)
